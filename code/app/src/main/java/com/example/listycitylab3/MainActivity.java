@@ -2,17 +2,21 @@ package com.example.listycitylab3;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements AddCityFragment.AddCityDialogListener{
+public class MainActivity extends AppCompatActivity implements AddCityFragment.AddCityDialogListener, EditCityFragment.EditCityDialogListener{
 
     private ArrayList<City> dataList;
     private ListView cityList;
@@ -23,6 +27,15 @@ public class MainActivity extends AppCompatActivity implements AddCityFragment.A
         cityAdapter.add(city);
         cityAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void editCity(City city,String name,String province){
+        city.setName(name);
+        city.setProvince(province);
+        cityAdapter.notifyDataSetChanged();
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,16 @@ public class MainActivity extends AppCompatActivity implements AddCityFragment.A
         cityAdapter = new CityArrayAdapter(this, dataList);
         cityList.setAdapter(cityAdapter);
 
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                City selectedCity = cityAdapter.getItem(i);
+                EditCityFragment fragment = EditCityFragment.newInstance(selectedCity);
+                fragment.show(getSupportFragmentManager(), "Edit City");
+                //editCity(selectedCity, "Dhaka", "BD");
+            }
+        });
+
         FloatingActionButton fab = findViewById(R.id.button_add_city);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,5 +73,8 @@ public class MainActivity extends AppCompatActivity implements AddCityFragment.A
                 new AddCityFragment().show(getSupportFragmentManager(), "Add City");
             }
         });
+
+
+
     }
 }

@@ -22,7 +22,7 @@ public class AddCityFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof AddCityDialogListener) {
+        if (context instanceof EditCityFragment.EditCityDialogListener) {
             listener = (AddCityDialogListener) context;
         } else {
             throw new RuntimeException(context + " must implement AddCityDialogListener");
